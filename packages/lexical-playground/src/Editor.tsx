@@ -67,6 +67,7 @@ import YouTubePlugin from './plugins/YouTubePlugin';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 import ContentEditable from './ui/ContentEditable';
 import Placeholder from './ui/Placeholder';
+import ITestPlugin from './plugins/ITestPlugin'
 
 const skipCollaborationInit =
   // @ts-ignore
@@ -126,6 +127,7 @@ export default function Editor(): JSX.Element {
         <AutoEmbedPlugin />
         <MentionsPlugin />
         <EmojisPlugin />
+        <ITestPlugin />
         <HashtagPlugin />
         <KeywordsPlugin />
         <SpeechToTextPlugin />
