@@ -89,6 +89,7 @@ import {
 } from '../ImagesPlugin';
 import {InsertPollDialog} from '../PollPlugin';
 import {InsertNewTableDialog, InsertTableDialog} from '../TablePlugin';
+import { KEY_VALUE_COMMAND } from '../IlluTestPlugin'
 
 const blockTypeToBlockName = {
   bullet: 'Bulleted List',
@@ -996,6 +997,17 @@ export default function ToolbarPlugin(): JSX.Element {
       </DropDown>
 
       {modal}
+      <button
+        // disabled={!canUndo || !isEditable}
+        onClick={() => {
+          activeEditor.dispatchCommand(KEY_VALUE_COMMAND, ' myKey:');
+        }}
+        title={IS_APPLE ? 'KeyValue (⌘Z)' : 'KeyValue (Ctrl+Z)'}
+        type="button"
+        className="toolbar-item spaced"
+        aria-label="KeyValue">
+        KeyValue
+      </button>
     </div>
   );
 }

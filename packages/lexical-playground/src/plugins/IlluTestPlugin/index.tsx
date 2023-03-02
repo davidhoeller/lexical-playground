@@ -3,22 +3,23 @@ import { $createParagraphNode, $createTextNode, $getRoot, $getSelection, COMMAND
 import { useEffect } from 'react'
 import { mergeRegister } from '@lexical/utils'
 
-export const FUT_COMMAND: LexicalCommand<string> = createCommand('FUT_COMMAND')
+export const KEY_VALUE_COMMAND: LexicalCommand<string> = createCommand('KEY_VALUE_COMMAND')
 
 export default function ITestPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext()
 
   useEffect(() => {
       const onKeyDown = (e: KeyboardEvent) => { /* Your handler logic here */
-        if (e.key === 'f') {
-          // editor.dispatchCommand(CONTROLLED_TEXT_INSERTION_COMMAND, 'fut! ')
-          const isProcessed = editor.dispatchCommand(FUT_COMMAND, 'fut! ')
+        if (e.key === 'k' && e.metaKey) {
+          // console.log('e',e)
+          // editor.dispatchCommand(CONTROLLED_TEXT_INSERTION_COMMAND, 'key: ')
+          const isProcessed = editor.dispatchCommand(KEY_VALUE_COMMAND, ' key:')
           if (isProcessed) e.preventDefault()
         }
       }
 
-      const removeFutCommand = editor.registerCommand(
-        FUT_COMMAND,
+      const removeKeyValueCommand = editor.registerCommand(
+        KEY_VALUE_COMMAND,
         (text: string) => {
           // way 1: dispatch a command:
           // editor.dispatchCommand(CONTROLLED_TEXT_INSERTION_COMMAND, text)
@@ -33,7 +34,7 @@ export default function ITestPlugin(): JSX.Element | null {
             const selection = $getSelection() // Get the selection from the EditorState
             console.log('selection:', selection)
             // const paragraphNode = $createParagraphNode() // Create a new ParagraphNode
-            const textNode = $createTextNode('Futten') // Create a new TextNode
+            const textNode = $createTextNode(text) // Create a new TextNode
             textNode.setStyle('{ color:red;')
 
             // paragraphNode.append(textNode) // Append the text node to the paragraph
@@ -60,7 +61,7 @@ export default function ITestPlugin(): JSX.Element | null {
       )
 
       return mergeRegister(
-        removeFutCommand,
+        removeKeyValueCommand,
         removeRootListener,
       )
 

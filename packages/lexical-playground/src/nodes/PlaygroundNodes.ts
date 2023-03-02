@@ -34,6 +34,7 @@ import {StickyNode} from './StickyNode';
 import {TableNode as NewTableNode} from './TableNode';
 import {TweetNode} from './TweetNode';
 import {YouTubeNode} from './YouTubeNode';
+import {KeyValueNode} from './KeyValueNode';
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -67,6 +68,7 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   CollapsibleContainerNode,
   CollapsibleContentNode,
   CollapsibleTitleNode,
+  KeyValueNode,
 ];
 
 export default PlaygroundNodes;

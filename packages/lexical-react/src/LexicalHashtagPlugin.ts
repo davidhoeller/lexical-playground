@@ -6,12 +6,12 @@
  *
  */
 
-import type {TextNode} from 'lexical';
+import type { TextNode } from 'lexical'
 
-import {$createHashtagNode, HashtagNode} from '@lexical/hashtag';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {useLexicalTextEntity} from '@lexical/react/useLexicalTextEntity';
-import {useCallback, useEffect} from 'react';
+import { $createHashtagNode, HashtagNode } from '@lexical/hashtag'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { useLexicalTextEntity } from '@lexical/react/useLexicalTextEntity'
+import { useCallback, useEffect } from 'react'
 
 function getHashtagRegexStringChars(): Readonly<{
   alpha: string;
@@ -39,7 +39,7 @@ function getHashtagRegexStringChars(): Readonly<{
     '\u028b' +
     '\u02bb' +
     '\u0300-\u036f' +
-    '\u1e00-\u1eff';
+    '\u1e00-\u1eff'
 
   // Cyrillic (Russian, Ukrainian, etc.)
   const nonLatinChars =
@@ -87,9 +87,9 @@ function getHashtagRegexStringChars(): Readonly<{
     '\uA960-\uA97F' + // Hangul Jamo Extended-A
     '\uAC00-\uD7AF' + // Hangul Syllables
     '\uD7B0-\uD7FF' + // Hangul Jamo Extended-B
-    '\uFFA1-\uFFDC'; // Half-width Hangul
+    '\uFFA1-\uFFDC' // Half-width Hangul
 
-  const charCode = String.fromCharCode;
+  const charCode = String.fromCharCode
 
   const cjkChars =
     '\u30A1-\u30FA\u30FC-\u30FE' + // Katakana (full-width)
@@ -110,9 +110,9 @@ function getHashtagRegexStringChars(): Readonly<{
     charCode(0x2f800) +
     '-' +
     charCode(0x2fa1f) +
-    '\u3003\u3005\u303B'; // Kanji (CJK supplement)
+    '\u3003\u3005\u303B' // Kanji (CJK supplement)
 
-  const otherChars = latinAccents + nonLatinChars + cjkChars;
+  const otherChars = latinAccents + nonLatinChars + cjkChars
   // equivalent of \p{L}
 
   const unicodeLetters =
@@ -166,7 +166,7 @@ function getHashtagRegexStringChars(): Readonly<{
     '\uFB3E\uFB40-\uFB41\uFB43-\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F' +
     '\uFD92-\uFDC7\uFDF0-\uFDFB\uFE70-\uFE74\uFE76-\uFEFC\uFF21-\uFF3A' +
     '\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7' +
-    '\uFFDA-\uFFDC';
+    '\uFFDA-\uFFDC'
 
   // equivalent of \p{Mn}\p{Mc}
   const unicodeAccents =
@@ -190,7 +190,7 @@ function getHashtagRegexStringChars(): Readonly<{
     '\u180B-\u180D\u18A9\u1920-\u192B\u1930-\u193B\u19B0-\u19C0\u19C8-\u19C9' +
     '\u1A17-\u1A1B\u1DC0-\u1DC3\u20D0-\u20DC\u20E1\u20E5-\u20EB\u302A-\u302F' +
     '\u3099-\u309A\uA802\uA806\uA80B\uA823-\uA827\uFB1E\uFE00-\uFE0F' +
-    '\uFE20-\uFE23';
+    '\uFE20-\uFE23'
 
   // equivalent of \p{Dn}
   const unicodeDigits =
@@ -198,36 +198,36 @@ function getHashtagRegexStringChars(): Readonly<{
     '\u0A66-\u0A6F\u0AE6-\u0AEF\u0B66-\u0B6F\u0BE6-\u0BEF\u0C66-\u0C6F' +
     '\u0CE6-\u0CEF\u0D66-\u0D6F\u0E50-\u0E59\u0ED0-\u0ED9\u0F20-\u0F29' +
     '\u1040-\u1049\u17E0-\u17E9\u1810-\u1819\u1946-\u194F\u19D0-\u19D9' +
-    '\uFF10-\uFF19';
+    '\uFF10-\uFF19'
 
   // An alpha char is a unicode chars including unicode marks or
   // letter or char in otherChars range
-  const alpha = unicodeLetters + unicodeAccents + otherChars;
+  const alpha = unicodeLetters + unicodeAccents + otherChars
 
   // A numeric character is any with the number digit property, or
   // underscore. These characters can be included in hashtags, but a hashtag
   // cannot have only these characters.
-  const numeric = unicodeDigits + '_';
+  const numeric = unicodeDigits + '_'
 
   // Alphanumeric char is any alpha char or a unicode char with decimal
   // number property \p{Nd}
-  const alphanumeric = alpha + numeric;
-  const hashChars = '#\\uFF03'; // normal '#' or full-width '#'
+  const alphanumeric = alpha + numeric
+  const hashChars = '#\\uFF03' // normal '#' or full-width '#'
 
   return {
     alpha,
     alphanumeric,
     hashChars,
-  };
+  }
 }
 
 function getHashtagRegexString(): string {
-  const {alpha, alphanumeric, hashChars} = getHashtagRegexStringChars();
+  const { alpha, alphanumeric, hashChars } = getHashtagRegexStringChars()
 
-  const hashtagAlpha = '[' + alpha + ']';
-  const hashtagAlphanumeric = '[' + alphanumeric + ']';
-  const hashtagBoundary = '^|$|[^&/' + alphanumeric + ']';
-  const hashCharList = '[' + hashChars + ']';
+  const hashtagAlpha = '[' + alpha + ']'
+  const hashtagAlphanumeric = '[' + alphanumeric + ']'
+  const hashtagBoundary = '^|$|[^&/' + alphanumeric + ']'
+  const hashCharList = '[' + hashChars + ']'
 
   // A hashtag contains characters, numbers and underscores,
   // but not all numbers.
@@ -241,47 +241,49 @@ function getHashtagRegexString(): string {
     '*' +
     hashtagAlpha +
     hashtagAlphanumeric +
-    '*)';
+    '*)'
 
-  return hashtag;
+  return hashtag
 }
 
-const REGEX = new RegExp(getHashtagRegexString(), 'i');
+const REGEX = new RegExp(getHashtagRegexString(), 'i')
 
 export function HashtagPlugin(): JSX.Element | null {
-  const [editor] = useLexicalComposerContext();
+  const [editor] = useLexicalComposerContext()
 
   useEffect(() => {
     if (!editor.hasNodes([HashtagNode])) {
-      throw new Error('HashtagPlugin: HashtagNode not registered on editor');
+      throw new Error('HashtagPlugin: HashtagNode not registered on editor')
     }
-  }, [editor]);
+  }, [editor])
 
   const createHashtagNode = useCallback((textNode: TextNode): HashtagNode => {
-    return $createHashtagNode(textNode.getTextContent());
-  }, []);
+    return $createHashtagNode(textNode.getTextContent())
+  }, [])
 
   const getHashtagMatch = useCallback((text: string) => {
-    const matchArr = REGEX.exec(text);
+    const matchArr = REGEX.exec(text)
 
     if (matchArr === null) {
-      return null;
+      return null
     }
 
-    const hashtagLength = matchArr[3].length + 1;
-    const startOffset = matchArr.index + matchArr[1].length;
-    const endOffset = startOffset + hashtagLength;
+    const hashtagLength = matchArr[3].length + 1
+    const startOffset = matchArr.index + matchArr[1].length
+    const endOffset = startOffset + hashtagLength
+
+    // console.log('***', matchArr, hashtagLength, startOffset, endOffset)
     return {
       end: endOffset,
       start: startOffset,
-    };
-  }, []);
+    }
+  }, [])
 
   useLexicalTextEntity<HashtagNode>(
     getHashtagMatch,
     HashtagNode,
     createHashtagNode,
-  );
+  )
 
-  return null;
+  return null
 }
