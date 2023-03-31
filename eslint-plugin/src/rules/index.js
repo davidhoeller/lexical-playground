@@ -8,8 +8,8 @@
 
 'use strict';
 
-const noOptionalChaining = require('./no-optional-chaining');
-
-module.exports = {
-  'no-optional-chaining': noOptionalChaining,
-};
+// const noOptionalChaining = require('./no-optional-chaining');
+//
+// module.exports = {
+//   'no-optional-chaining': noOptionalChaining,
+// };

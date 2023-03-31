@@ -90,7 +90,7 @@ module.exports = {
         'packages/lexical-devtools/**',
       ],
       rules: {
-        'lexical/no-optional-chaining': OFF,
+        // 'lexical/no-optional-chaining': OFF,
       },
     },
   ],

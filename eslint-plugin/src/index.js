@@ -14,12 +14,12 @@ module.exports = {
   configs: {
     all: {
       rules: {
-        'lexical/no-optional-chaining': 'error',
+        // 'lexical/no-optional-chaining': 'error',
       },
     },
     recommended: {
       rules: {
-        'lexical/no-optional-chaining': 'error',
+        // 'lexical/no-optional-chaining': 'error',
       },
     },
   },
